@@ -1,0 +1,45 @@
+INSTRUCCIONES
+
+Instrucciones bash para la generacion 
+automatica APK released con certificado
+y compresión. Prepara tu app para publicar 
+en la playstore.
+
+$ ./apk.sh -h
+
+_________________________________________
+        Usa y crea certificados con keytool
+        Genera instalador apk para producción
+        Procesa apk con jarsigner
+        Version 0.0.1
+_________________________________________
+
+Comando
+        ./apk.sh [argumento]
+Argumentos
+        -g Generar proyecto. Versión release para android
+        -k Procesa el apk (released) con keytool
+        -j Procesa el apk (released) con jarsigned
+        -z Procesa el apk (released) con zipalign
+
+
+REQUERIMIENTOS
+
+Es recomendable que en sistemas 
+operativos windows se tenga instalado 
+Gitbash. Una vez instalado se podrá
+ejecutar este script.
+
+Es importante tener instalado los
+siguientes programas con sus respectivas
+variables de entorno:
+
+- jdk 1.8.x
+        variable de entorno JAVA_HOME        
+- sdk android
+        última versión preferiblemente
+        variable de entorno ANDROID_HOME
+
+Licencia MIT
+Creado por Julian David 
+https://github.com/juliandavidmr
