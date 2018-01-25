@@ -77,7 +77,7 @@ function process_zipalign {
 }
 
 function process_build {
-    ionic cordova build --release android
+		ionic cordova build android --prod --release
 }
 
 # 1
