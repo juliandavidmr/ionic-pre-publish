@@ -21,7 +21,7 @@ Argumentos
         -k Procesa el apk (released) con keytool
         -j Procesa el apk (released) con jarsigned
         -z Procesa el apk (released) con zipalign
-
+        -h Muestra este menú
 
 REQUERIMIENTOS
 
