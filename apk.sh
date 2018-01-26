@@ -12,7 +12,7 @@
 
 arg1="$1"
 
-VERSION="0.0.1"
+VERSION="0.0.2"
 NAME_KEYSTORE="my-release-key.keystore"
 ALIAS_NAME="alias_app"
 
@@ -27,6 +27,7 @@ function validate_apk {
 }
 
 function process_keytool {
+    echo "[2/4] Procesando keytool"
     # APK released
     echo -e "- Buscando apk released..."
     
@@ -51,7 +52,11 @@ function process_keytool {
 }
 
 function process_jarsigned {
+    echo "[3/4] Procesando jarsigned"
     validate_apk
+    
+    rm "$ALIAS_NAME.apk"
+    
     local ARGUMENTS_JS="-verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore $NAME_KEYSTORE $APK_RELEASED $ALIAS_NAME"
     local JARSIGNED="\"$JAVA_HOME\bin\jarsigner.exe\" $ARGUMENTS_JS"
     # echo "$JARSIGNED"
@@ -59,6 +64,7 @@ function process_jarsigned {
 }
 
 function process_zipalign {
+    echo "[4/4] Procesando zipalign"
     validate_apk
     local ARGUMENTS="-v 4 $APK_RELEASED $ALIAS_NAME.apk"
     if [ ! $ANDROID_HOME ]; then
@@ -72,48 +78,52 @@ function process_zipalign {
         ZIPA="\"$ANDROID_HOME\build-tools\VERSION\zipalign.exe\" $ARGUMENTS"
     fi
     # echo "$ZIPA"
-    sleep 1
+    sleep 0.8
     eval $ZIPA
 }
 
 function process_build {
-		ionic cordova build android --prod --release
+    echo "[1/4] Generando proyecto"
+    ionic cordova build android --prod --aot --release
 }
 
 # 1
 if [ "$arg1" = "-g" ]; then
-    echo "[1/4] Generando proyecto"
     process_build
 fi
 
 # 2
 if [ "$arg1" = "-k" ]; then
-    echo "[2/4] Procesando keytool"
-    sleep 0.4
     process_keytool
 fi
 
 # 3
 if [ "$arg1" = "-j" ]; then
-    echo "[3/4] Procesando jarsigned"
-    sleep 0.4
     process_jarsigned
 fi
 
 # 4
 if [ "$arg1" = "-z" ]; then
-    echo "[4/4] Procesando zipalign"
+    process_zipalign
+fi
+
+# 4
+if [ "$arg1" = "-a" ]; then
+    echo "| Proceso completo |"
+    process_build
+    process_keytool
+    process_jarsigned
     process_zipalign
 fi
 
 # help
 if [ "$arg1" = "-h" ]; then
-    echo "_________________________________________"
-    echo "	Usa y crea certificados con keytool"
-    echo "	Genera instalador apk para producción"
-    echo "	Procesa apk con jarsigner"
-    echo "	Version $VERSION"
-    echo "_________________________________________"
+    echo ""
+    echo "Usa y crea certificados con keytool"
+    echo "Genera instalador apk para producción"
+    echo "Procesa apk con jarsigner"
+    echo "Version $VERSION"
+    echo "__________________________________________________"
     echo ""
     echo "Comando"
     echo "	./apk.sh [argumento]"
@@ -122,8 +132,11 @@ if [ "$arg1" = "-h" ]; then
     echo "	-k Procesa el apk (released) con keytool"
     echo "	-j Procesa el apk (released) con jarsigned"
     echo "	-z Procesa el apk (released) con zipalign"
+    echo "	-a Realiza todas operaciones ordenadamente"
+    echo "	   Genera apk release"
+    echo "	   Ejecuta keytool, jarsigned y zipalign"
     echo "	-h Muestra este menú"
     echo ""
     echo "Licencia MIT"
-    echo "Creado por Julian David <https://github.com/juliandavidmr>"
+    echo "Julian David <https://github.com/juliandavidmr>"
 fi

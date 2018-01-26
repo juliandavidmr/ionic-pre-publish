@@ -7,12 +7,11 @@ en la playstore.
 
 $ ./apk.sh -h
 
-_________________________________________
-        Usa y crea certificados con keytool
-        Genera instalador apk para producción
-        Procesa apk con jarsigner
-        Version 0.0.1
-_________________________________________
+Usa y crea certificados con keytool
+Genera instalador apk para producción
+Procesa apk con jarsigner
+Version 0.0.2
+__________________________________________________
 
 Comando
         ./apk.sh [argumento]
@@ -21,6 +20,9 @@ Argumentos
         -k Procesa el apk (released) con keytool
         -j Procesa el apk (released) con jarsigned
         -z Procesa el apk (released) con zipalign
+        -a Realiza todas operaciones ordenadamente
+           Genera apk release
+           Ejecuta keytool, jarsigned y zipalign
         -h Muestra este menú
 
 REQUERIMIENTOS
